@@ -1,12 +1,32 @@
 const express = require('express');
 const authController = require('../controllers/auth');
-const {check} = require('express-validator/check')
+const { check, body } = require('express-validator/check');
 
 const router = express.Router();
 router.get('/login', authController.getLogin);
 router.get('/signup', authController.getSignup);
 router.post('/login', authController.postLogin);
-router.post('/signup',check('email').isEmail().withMessage('Please enter a valid email.'), authController.postSignup);
+router.post(
+  '/signup',
+  [
+    check('email')
+      .isEmail()
+      .withMessage('Please enter a valid email.')
+      .custom((value, { req }) => {
+        if (value === 'test@test.com') {
+          throw new Error('This email address if forbidden');
+        }
+        return true;
+      }),
+    body(
+      'password',
+      'Please enter a password with only numbers and text and at least 12 characters.'
+    )
+      .isLength({ min: 12 })
+      .isAlphanumeric(),
+  ],
+  authController.postSignup
+);
 router.post('/logout', authController.postLogout);
 router.get('/reset', authController.getReset);
 router.post('/reset', authController.postReset);
