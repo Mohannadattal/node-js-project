@@ -13,7 +13,7 @@
                         <%= errorMessage %>
                     </div>
                     <% } %>
-                        <form class="login-form" action="/signup" method="POST" novalidate>
+                        <form class="login-form" action="/signup" method="POST">
                             <div class="form-control">
                                 <label for="email">E-Mail</label>
                                 <input
@@ -24,14 +24,13 @@
                                 <label for="password">Password</label>
                                 <input
                                     class="<%= validationErrors.find(error=>error.param ==='password') ? 'invalid' : '' %>"
-                                    type="email" type="password" name="password" id="password"
-                                    value="<%= oldInput.password %>">
+                                    type="password" name="password" id="password" value="<%= oldInput.password %>">
                             </div>
                             <div class="form-control">
                                 <label for="confirmPassword">Confirm Password</label>
                                 <input
                                     class="<%= validationErrors.find(error=>error.param ==='confirmPassword') ? 'invalid' : '' %>"
-                                    type="email" type="password" name="confirmPassword" id="confirmPassword"
+                                    type="password" name="confirmPassword" id="confirmPassword"
                                     value="<%= oldInput.confirmPassword %>">
                             </div>
                             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
