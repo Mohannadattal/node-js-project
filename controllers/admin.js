@@ -1,5 +1,6 @@
 const Product = require('../models/product');
 const { validationResult } = require('express-validator/check');
+const mongoose = require('mongoose');
 
 exports.getAddProduct = (req, res, next) => {
   res.render('admin/edit-product', {
@@ -22,7 +23,7 @@ exports.postAddProduct = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).render('admin/edit-product', {
       pageTitle: 'Add Product',
-      path: '/admin/edit-product',
+      path: '/admin/add-product',
       editing: false,
       hasError: true,
       product: {
@@ -36,6 +37,7 @@ exports.postAddProduct = (req, res, next) => {
     });
   }
   const product = new Product({
+    _id: new mongoose.Types.ObjectId('63ee4118437cae1abadc698d'),
     title: title,
     price: price,
     description: description,
@@ -46,11 +48,26 @@ exports.postAddProduct = (req, res, next) => {
     .save()
     .then((result) => {
       // console.log(result);
-     // console.log('Created Product');
+      // console.log('Created Product');
       res.redirect('/admin/products');
     })
     .catch((err) => {
-      console.log(err);
+      // return res.status(500).render('admin/edit-product', {
+      //   pageTitle: 'Add Product',
+      //   path: '/admin/add-product',
+      //   editing: false,
+      //   hasError: true,
+      //   product: {
+      //     title: title,
+      //     imageUrl: imageUrl,
+      //     price: price,
+      //     description: description,
+      //   },
+      //   errorMessage: 'Database operation failed, please tra again',
+      //   validationErrors: [],
+      // });
+
+      res.redirect('/500')
     });
 };
 
@@ -114,7 +131,7 @@ exports.postEditProduct = (req, res, next) => {
       product.description = updatedDesc;
       product.imageUrl = updatedImageUrl;
       return product.save().then((result) => {
-       // console.log('UPDATED PRODUCT!');
+        // console.log('UPDATED PRODUCT!');
         res.redirect('/admin/products');
       });
     })
@@ -126,7 +143,7 @@ exports.getProducts = (req, res, next) => {
   Product.find({ userId: req.user._id })
 
     .then((products) => {
-     // console.log(products);
+      // console.log(products);
       res.render('admin/products', {
         prods: products,
         pageTitle: 'Admin Products',
